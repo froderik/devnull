@@ -1,3 +1,5 @@
+var numberOfGuesses = 0;
+
 function placeWords(words) {
 
 	$.getJSON('http://localhost:4567/10words', function(data) {
@@ -12,11 +14,14 @@ function placeWords(words) {
 function sendGuess() {
 	var input = $('#guessBox').val();
 	console.log("sending: " + input);
-	$.getJSON('http://localhost:4567/guess', input, function(data) {
-	  
-		console.log("Got data:" + data);
-		
-	
+	numberOfGuesses++;
+	$.getJSON('http://localhost:4567/guess?q='+input, function(data) {
+		alert("right guess");
+		placeWords();
+		$('#guessBox').val('');
+	})
+	.error(function() { 
+		alert("wrong guess, number: " + numberOfGuesses); 
 	});
 
 }
