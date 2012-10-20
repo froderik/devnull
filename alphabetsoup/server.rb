@@ -9,7 +9,11 @@ get '/10words' do
   texts = paragraph_nodes.map{ |node| node.text.split ' ' }.flatten
   texts.sort! { |x,y| y.length <=> x.length }
   @@ten_words = texts[0..9]
-  @@ten_words.to_json
+  scramble(@@ten_words).to_json
+end
+
+def scramble word_array
+  word_array
 end
 
 get '/guess' do
