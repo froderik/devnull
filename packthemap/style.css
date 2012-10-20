@@ -1,0 +1,18 @@
+#mapDiv {
+	border: 1px solid black;
+}
+.map-cell {
+	width: 10px;
+	height: 10px;
+	background-color: green;
+	display: inline-block;
+}
+
+.row-separator {
+	padding: 0px;
+	margin: 0px;
+	height: 10px;
+}
+
+
+
