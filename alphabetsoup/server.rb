@@ -7,13 +7,20 @@ get '/10words' do
   page = agent.get 'http://www.dn.se'
   paragraph_nodes = page.search('p')
   texts = paragraph_nodes.map{ |node| node.text.split ' ' }.flatten
-  texts.sort! { |x,y| y.length <=> x.length }
+  texts.select! { |word| word.length >= 5 }
+  texts.sort! { |x,y| x.length <=> y.length }
   @@ten_words = texts[0..9]
   scramble(@@ten_words).to_json
 end
 
 def scramble word_array
-  word_array
+  word_array.map { |word| scramble_one word }
+end
+
+def scramble_one word
+  temp_array = []
+  word.chars.each { |c| temp_array << c }
+  temp_array.shuffle.join
 end
 
 get '/guess' do
