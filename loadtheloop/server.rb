@@ -1,21 +1,25 @@
 require 'sinatra'
 
 get '/' do
+  redirect '/index.html'
+end
+
+get '/files' do
   html = ''
-  html << '<html><body><ul>'
+  html << '<ul>'
   Dir.foreach('public/filearea') { |file|
     html << "<li><a href=\"filearea/#{file}\">#{file}</a></li>" unless file == '.' or file == '..'
   }
   html << '</ul>'
-  html << '<input id="files-upload" type="file" multiple />'
-  html << '<button id="uploadButton">Upload files</button>'
-  html << ' <script src="jquery/jquery-1.8.2.js"></script>'
-  html << '<script src="js/script.js"></script>'
-  html << '</body></html>'
   html
 end
 
 post '/upload' do
-  puts "=== Got file: #{params[:file]}"
-  puts request.body.read
+  file_name = 'public/filearea/' + Time.new.to_i.to_s + request.env["HTTP_X_FILE_NAME"]
+  file_contents = request.body.read
+  
+  File.open(file_name, 'w+') { |f|
+    f.write(file_contents)
+  }
+  
 end
