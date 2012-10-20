@@ -1,7 +1,8 @@
 #wordsBox {
-	clear:both;
+	width: 800px;
+	height: 30px;
 }
 
 #guessBox {
-	clear:both;
+
 }
