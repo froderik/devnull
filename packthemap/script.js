@@ -46,17 +46,14 @@ var maphandler = function(){
 
 		add_player();		
 
-		init_keys();
-
-
 	}
 
 
 
 	function add_player() {
 		$('#mapDiv').append('<div id="player-cell" class="map-cell"></div>');
-		var offset = $('#mapDiv').offset();
-		$('#player-cell').offset({ top: (offset.top + player_y * 10), left: (offset.left + player_x * 10)})
+		var offset = get_offset_for_cell(player_x,player_y);
+		$('#player-cell').offset({ top: (offset.top), left: (offset.left)})
 
 		gamemap[player_x][player_y] = 'p';
 
@@ -107,6 +104,10 @@ var maphandler = function(){
 
 	}
 
+	function get_offset_for_cell(x,y) {
+		return $(get_cell_id(x,y)).offset();
+	}
+
 	function get_cell_id(x,y) {
 		var cid =  "#" + x + "-" + y;
 		//console.log("cellid:" + cid);
@@ -115,6 +116,7 @@ var maphandler = function(){
 
 	function init_keys(){
 		$(document).keydown(function(e){
+			e.preventDefault();
 			var left = 37;
 			var up = 38;
 			var right = 39;
@@ -143,10 +145,11 @@ var maphandler = function(){
 		var player_y_new = player_y + dy;
 
 		console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
-		console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
 
 
-		if (gamemap[player_x_new][player_y_new] == 'f' && new_position_in_map(player_x_new, player_y_new)) {
+		if (new_position_in_map(player_x_new, player_y_new) && gamemap[player_x_new][player_y_new] == 'f') {
+					
+			console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
 			
 			gamemap[player_x][player_y] = 'f';
 
@@ -154,10 +157,12 @@ var maphandler = function(){
 			player_y = player_y_new;
 			gamemap[player_x][player_y] = 'p';
 
-			var offset = $('#player-cell').offset();
+			var offset = get_offset_for_cell(player_x,player_y);
+			console.log("offset: " + offset.left + " : " + offset.top);
+
 			//$('#player-cell').offset({ top: (offset.top + (dy * 10)), left: (offset.left + (dx * 10))})
-			$('#player-cell').animate({ top: (offset.top + (dy * 10)), 
-										left: (offset.left + (dx * 10))
+			$('#player-cell').animate({ top: offset.top, 
+										left: offset.left
 									  }, 250);
 		}
 
