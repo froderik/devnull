@@ -116,7 +116,7 @@ var maphandler = function(){
 
 	function init_keys(){
 		$(document).keydown(function(e){
-			e.preventDefault();
+			//e.preventDefault();
 			var left = 37;
 			var up = 38;
 			var right = 39;
