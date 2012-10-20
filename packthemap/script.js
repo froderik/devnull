@@ -19,28 +19,28 @@ var maphandler = function(){
 
 		var x,y;
 		console.log("init map");
-		
+
 		$('mapDiv').html('');
 
-		init_game_map();	
+		init_game_map();
 
 		for (y = 0; y<matrixsize;y++) {
 			var maprow = "";
 			maprow = '<div class="row-separator">';
 
-			
+
 			for (x = 0; x<matrixsize;x++) {
 				var cellid = "" + x + "-" +  y;
-				maprow += '<span class="map-cell free-cell" id="' + cellid + '"/>';	
+				maprow += '<span class="map-cell free-cell" id="' + cellid + '"/>';
 			}
 
 			maprow += '</div>';
 			$('#mapDiv').append(maprow);
 		}
-		
+
 		create_walls(30);
 
-		
+
 	}
 
 	function create_walls(numberofwalls) {
@@ -63,7 +63,7 @@ var maphandler = function(){
 		}
 
 		for (i=wall_start;i<wall_end;i++) {
-			
+
 			if ((direction % 2) == 0) {
 				x=i;
 				y=wall_other;
@@ -86,15 +86,41 @@ var maphandler = function(){
 
 	}
 
+	function init_keys(){
+		$(document).keydown(function(e){
+			var left = 37;
+			var up = 38;
+			var right = 39;
+			var down = 40;
+			if (e.keyCode == left) {
+				slide_image( -1, 0 )
+			}
+			if (e.keyCode == up) {
+				slide_image( 0, 1 )
+			}
+			if (e.keyCode == right) {
+				slide_image( 1, 0 )
+			}
+			if (e.keyCode == down) {
+				slide_image( 0, -1 )
+			}
+		});
+	}
+
+	function slide_image(dx, dy){
+		alert("Sliding")
+	}
+
 	return {
-		init_map:init_map
+		init_map:init_map,
+		init_keys:init_keys
 	};
 
 }();
 
 $(document).ready(function(){
 	maphandler.init_map();
+	maphandler.init_keys();
 });
 
 
-	
