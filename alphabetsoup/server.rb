@@ -7,7 +7,8 @@ get '/10words' do
   page = agent.get 'http://www.dn.se'
   paragraph_nodes = page.search('p')
   texts = paragraph_nodes.map{ |node| node.text.split ' ' }.flatten
-  texts.sort! { |x,y| y.length <=> x.length }
+  texts.select! { |word| word.length >= 5 }
+  texts.sort! { |x,y| x.length <=> y.length }
   @@ten_words = texts[0..9]
   scramble(@@ten_words).to_json
 end
