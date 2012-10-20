@@ -93,7 +93,7 @@ var maphandler = function(){
 		while(monstersadded < numberofmonsters) {
 			var px = get_random_of_matrix();
 			var py = get_random_of_matrix();
-			
+
 			if (gamemap[px][py] == 'f') {
 				console.log('monster pos: ' + px + ":" + py);
 				monstersadded++;
@@ -105,7 +105,7 @@ var maphandler = function(){
 				monster_object = { top: py, left: px, id: monsterid};
 				//monster_list[monsterid] = monster_object;
 				monster_list[monsterid] = monster_object;
-				
+
 				//console.log(monster_list[monsterid]);
 			}
 
@@ -157,11 +157,11 @@ var maphandler = function(){
 		for(var monsterid in monster_list){
 			if (monster_list.hasOwnProperty(monsterid)) {
 				console.log(monster_list[monsterid]);
-				move_monster(monster_list[monsterid]);	
+				move_monster(monster_list[monsterid]);
 			}
-			
+
 		}
-		monsterinterval = setInterval(move_monsters, 250);
+		monsterinterval = setInterval(move_monsters, 1500);
 	}
 
 	function add_player() {
@@ -273,7 +273,17 @@ var maphandler = function(){
 				$('#player-cell').addClass('player-hulk');
 			}
 
-			hulkmodeinterval = setInterval(player_normal_mode,5000);
+			hulkmodeinterval = setInterval(player_normal_mode,10000);
+		}
+
+		if (gamemap[player_x_new][player_y_new].match('monster')) {
+			if( player_mode == 'h'){
+				monster_id = gamemap[player_x_new][player_y_new];
+				gamemap[player_x_new][player_y_new] = 'f';
+				eat_monster(monster_id);
+			} else {
+				die();
+			}
 		}
 
 		if (new_position_in_map(player_x_new, player_y_new)) {
@@ -291,6 +301,20 @@ var maphandler = function(){
 
 			move_block('#player-cell',offset);
 		}
+	}
+
+	function eat_monster(monster_id){
+		delete monster_list.monster_id;
+		$('#' + monster_id).remove();
+		monstersadded--;
+		if(monstersadded == 0){
+			alert("You won!");
+		}
+	}
+
+	function die(){
+		alert("Loser!");
+		init_map();
 	}
 
 	function player_normal_mode() {
