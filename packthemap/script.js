@@ -11,7 +11,8 @@ var maphandler = function(){
 	var player_mode = 'n';
 	var hulkmodeinterval = 0;
 
-	var monster_list = [];
+	var monster_list = {};
+	var monsterinterval = 0;
 
 	var gamemap = [];
 
@@ -32,7 +33,7 @@ var maphandler = function(){
 		console.log("init map");
 		pillsadded = 0;
 		monstersadded = 0;
-		monster_list = [];
+		monster_list = {};
 
 		$('#mapDiv').html('');
 
@@ -60,6 +61,7 @@ var maphandler = function(){
 
 		add_pills();
 		add_monsters();
+
 		move_monsters();
 
 	}
@@ -91,9 +93,9 @@ var maphandler = function(){
 		while(monstersadded < numberofmonsters) {
 			var px = get_random_of_matrix();
 			var py = get_random_of_matrix();
-			console.log('monster pos: ' + px + ":" + py);
-
+			
 			if (gamemap[px][py] == 'f') {
+				console.log('monster pos: ' + px + ":" + py);
 				monstersadded++;
 				var offset = get_offset_for_cell(px,py);
 				var monsterid = 'monster' + monstersadded;
@@ -101,14 +103,17 @@ var maphandler = function(){
 				$('#mapDiv').append('<div id="'+monsterid+ '" class="map-cell monster-cell"></div>');
 				move_block("#" + monsterid,offset);
 				monster_object = { top: py, left: px, id: monsterid};
+				//monster_list[monsterid] = monster_object;
 				monster_list[monsterid] = monster_object;
-				console.log(monster_list[monsterid]);
+				
+				//console.log(monster_list[monsterid]);
 			}
 
 		}
 	}
 
 	function move_monster(monster){
+
 		var random_number = Math.floor(Math.random()*4);
 		monster_x_new = monster.left
 		monster_y_new = monster.top
@@ -124,6 +129,10 @@ var maphandler = function(){
 		if(random_number == 3){
 			monster_y_new -= 1
 		}
+
+		console.log("about to move monster: " + monster.id + "pos: " + monster_x_new + ":" + monster_y_new);
+		console.log("gamemap status for monster: " + gamemap[monster.left][monster.top])
+
 		if (new_position_in_map(monster_x_new, monster_y_new)) {
 
 			console.log('new position: ' + monster_x_new + ":" + monster_y_new + "cell: " + gamemap[monster_x_new][monster_y_new]);
@@ -137,16 +146,22 @@ var maphandler = function(){
 			var offset = get_offset_for_cell(monster.left,monster.top);
 			console.log("offset: " + offset.left + " : " + offset.top);
 
-			move_block(monster.id,offset);
+			move_block("#" + monster.id,offset);
 		}
 
 	}
 
 	function move_monsters(){
-		for(var i=0; i<monster_list.length; i++){
-			move_monster(monster_list[i]);
+		console.log('moving all monsters....');
+		window.clearInterval(monsterinterval);
+		for(var monsterid in monster_list){
+			if (monster_list.hasOwnProperty(monsterid)) {
+				console.log(monster_list[monsterid]);
+				move_monster(monster_list[monsterid]);	
+			}
+			
 		}
-		setInterval(move_monsters, 250);
+		monsterinterval = setInterval(move_monsters, 250);
 	}
 
 	function add_player() {
