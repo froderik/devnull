@@ -1,3 +1,7 @@
 #wordsBox {
-	disabled: true;
+	clear:both;
+}
+
+#guessBox {
+	clear:both;
 }
