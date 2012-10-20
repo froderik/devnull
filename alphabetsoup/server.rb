@@ -13,7 +13,13 @@ get '/10words' do
 end
 
 def scramble word_array
-  word_array
+  word_array.map { |word| scramble_one word }
+end
+
+def scramble_one word
+  temp_array = []
+  word.chars.each { |c| temp_array << c }
+  temp_array.shuffle.join
 end
 
 get '/guess' do
