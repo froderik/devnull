@@ -9,6 +9,7 @@ var maphandler = function(){
 	var player_x = 0;
 	var player_y = matrixsize/2;
 	var player_mode = 'n';
+	var hulkmodeinterval = 0;
 
 	var monster_list = [];
 
@@ -249,10 +250,15 @@ var maphandler = function(){
 			$("#"+pillid).fadeOut(500);
 			gamemap[player_x_new][player_y_new] = 'f';
 			// TODO: player in turbo!!!!
-			player_mode = 'h';
-			$('#player-cell').removeClass('player-normal');
-			$('#player-cell').addClass('player-hulk');
-			setInterval(function(){player_normal_mode()},5000);
+			if (player_mode == 'h') {
+				window.clearInterval(hulkmodeinterval);
+			} else {
+				player_mode = 'h';
+				$('#player-cell').removeClass('player-normal');
+				$('#player-cell').addClass('player-hulk');
+			}
+
+			hulkmodeinterval = setInterval(player_normal_mode,5000);
 		}
 
 		if (new_position_in_map(player_x_new, player_y_new)) {
