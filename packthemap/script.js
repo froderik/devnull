@@ -40,7 +40,7 @@ var maphandler = function(){
 		
 		create_walls(10);
 
-		console.log(gamemap);
+		
 	}
 
 	function create_walls(numberofwalls) {
@@ -61,11 +61,6 @@ var maphandler = function(){
 		if (wall_end > 49) {
 			wall_end = 48;
 		}
-
-		console.log("direction: " + direction);
-		console.log("wall_length:" + wall_length);
-		console.log("wall_start:" + wall_start);
-		console.log("wall_other: " + wall_other);
 
 		for (i=wall_start;i<wall_end;i++) {
 			
