@@ -1,11 +1,16 @@
-#mapDiv {
-	border: 1px solid black;
-}
+
 .map-cell {
 	width: 10px;
 	height: 10px;
-	background-color: green;
 	display: inline-block;
+}
+
+.free-cell {
+	background-color: green;
+}
+
+.wall-cell {
+	background-color: red;
 }
 
 .row-separator {
