@@ -13,6 +13,14 @@
 	background-color: red;
 }
 
+.pill-cell {
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+	background-color: pink;
+	position: absolute;
+}
+
 .row-separator {
 	padding: 0px;
 	margin: 0px;

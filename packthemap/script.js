@@ -1,5 +1,10 @@
 var maphandler = function(){
 
+	var numbeofpills = 4;
+	var numberofmonsters = 4;
+	var pillsadded = 0;
+	var monstersadded = 0;
+
 	var matrixsize = 30;
 	var player_x = 0;
 	var player_y = matrixsize/2;
@@ -21,6 +26,8 @@ var maphandler = function(){
 
 		var x,y;
 		console.log("init map");
+		pillsadded = 0;
+		monstersadded = 0;
 
 		$('#mapDiv').html('');
 
@@ -46,9 +53,37 @@ var maphandler = function(){
 
 		add_player();
 
+		add_pills();
+		add_monsters();
+
 	}
 
 
+	function add_pills() {
+		while(pillsadded < numbeofpills) {
+			var px = get_random_of_matrix();
+			var py = get_random_of_matrix();
+			console.log('pill pos: ' + px + ":" + py);
+
+			if (gamemap[px][py] == 'f') {
+				gamemap[px][py] = 'x';
+				pillsadded++;
+				var offset = get_offset_for_cell(px,py);
+				var pillid = 'pill' + pillsadded;
+				$('#mapDiv').append('<div id="'+pillid+ '" class="map-cell pill-cell"></div>');
+				move_block("#" + pillid,offset);
+			}
+
+		}
+	}
+
+	function get_random_of_matrix() {
+		return Math.floor(Math.random()*matrixsize);
+	}
+
+	function add_monsters() {
+		
+	}
 
 	function add_player() {
 		$('#mapDiv').append('<div id="player-cell" class="map-cell"></div>');
@@ -137,7 +172,7 @@ var maphandler = function(){
 	}
 
 	function new_position_in_map(x,y) {
-		return (x >= 0 && x < matrixsize) && (y >= 0 && y < matrixsize);
+		return (x >= 0 && x < matrixsize) && (y >= 0 && y < matrixsize) && gamemap[x][y] == 'f';
 	}
 
 	function move_player(dx, dy){
@@ -147,7 +182,7 @@ var maphandler = function(){
 		console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
 
 
-		if (new_position_in_map(player_x_new, player_y_new) && gamemap[player_x_new][player_y_new] == 'f') {
+		if (new_position_in_map(player_x_new, player_y_new)) {
 
 			console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
 
@@ -160,12 +195,13 @@ var maphandler = function(){
 			var offset = get_offset_for_cell(player_x,player_y);
 			console.log("offset: " + offset.left + " : " + offset.top);
 
-			//$('#player-cell').offset({ top: (offset.top + (dy * 10)), left: (offset.left + (dx * 10))})
-			$('#player-cell').animate({ top: offset.top,
-										left: offset.left
-									  }, 250);
+			move_block('#player-cell',offset);
 		}
 
+	}
+
+	function move_block(id,offset) {
+		$(id).animate({ top: offset.top,left: offset.left}, 250);
 	}
 
 	return {
