@@ -1,14 +1,10 @@
 var numberOfGuesses = 0;
 
 function placeWords(words) {
-
 	$.getJSON('http://localhost:4567/10words', function(data) {
-	  
 		console.log("Got data:" + data);
 		$('#wordsBox').val(data.join(" "));
-	
 	});
-
 }
 
 function sendGuess() {
@@ -23,21 +19,15 @@ function sendGuess() {
 	.error(function() { 
 		alert("wrong guess, number: " + numberOfGuesses); 
 	});
-
 }
 
 $(document).ready(function(){
 	console.log("starting alphabetsoup client");
-
-
-
 	placeWords("apa apa apa");
-
 	$('#guessButton').click(function(){
 		console.log('guessing....');
 		sendGuess();
 	});
-
 });
 
 
