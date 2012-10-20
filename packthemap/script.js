@@ -21,10 +21,12 @@ var maphandler = function(){
 		console.log("init map");
 
 		$('mapDiv').html('');
+		$('#mapDiv').append('<div id="player"><img src="y.jpg" width="10px" heigth="10px"/></div>');
 
 		init_game_map();
 
 		for (y = 0; y<matrixsize;y++) {
+
 			var maprow = "";
 			maprow = '<div class="row-separator">';
 
@@ -108,7 +110,12 @@ var maphandler = function(){
 	}
 
 	function slide_image(dx, dy){
-		alert("Sliding")
+		top = $('#player').css('top');
+		left = $('#player').css('left');
+		$('#player').fadeOut();
+		$('#player').css('top', top + dy)
+		$('#player').css('left', top + dx)
+		$('#player').fadeIn();
 	}
 
 	return {

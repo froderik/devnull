@@ -19,5 +19,11 @@
 	height: 10px;
 }
 
+#player {
+  position:absolute;
+  top: 500;
+  left: 5;
+}
+
 
 
