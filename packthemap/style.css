@@ -24,7 +24,7 @@
 .monster-cell {
   top: 0px;
   left: 0px;
-  z-index: 100;
+  z-index: 105;
   background-color: orange;
   position: absolute;
 }
@@ -36,7 +36,7 @@
 }
 
 #player-cell {
-	z-index: 100;
+	z-index: 110;
 	position: absolute;
 
 

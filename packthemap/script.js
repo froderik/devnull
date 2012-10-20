@@ -1,11 +1,11 @@
 var maphandler = function(){
 
-	var numbeofpills = 4;
+	var numbeofpills = 10;
 	var numberofmonsters = 4;
 	var pillsadded = 0;
 	var monstersadded = 0;
 
-	var matrixsize = 30;
+	var matrixsize = 16;
 	var player_x = 0;
 	var player_y = matrixsize/2;
 	var player_mode = 'n';
@@ -30,20 +30,21 @@ var maphandler = function(){
 	function init_map() {
 
 		var x,y;
-		console.log("init map");
 		pillsadded = 0;
 		monstersadded = 0;
 		monster_list = {};
+		player_x = 0;
+		player_y = matrixsize/2;
 
-		$('#mapDiv').html('');
+		console.log("INIT GAME!");
+
+		$('#mapDiv').children().remove();
 
 		init_game_map();
 
 		for (y = 0; y<matrixsize;y++) {
-
 			var maprow = "";
 			maprow = '<div class="row-separator">';
-
 
 			for (x = 0; x<matrixsize;x++) {
 				var cellid = get_cell_id(x,y);
@@ -55,7 +56,7 @@ var maphandler = function(){
 			$('#mapDiv').append(maprow);
 		}
 
-		create_walls(10);
+		create_walls(3);
 
 		add_player();
 
@@ -71,7 +72,7 @@ var maphandler = function(){
 		while(pillsadded < numbeofpills) {
 			var px = get_random_of_matrix();
 			var py = get_random_of_matrix();
-			console.log('pill pos: ' + px + ":" + py);
+			//console.log('pill pos: ' + px + ":" + py);
 
 			if (gamemap[px][py] == 'f') {
 				pillsadded++;
@@ -95,7 +96,7 @@ var maphandler = function(){
 			var py = get_random_of_matrix();
 
 			if (gamemap[px][py] == 'f') {
-				console.log('monster pos: ' + px + ":" + py);
+				//console.log('monster pos: ' + px + ":" + py);
 				monstersadded++;
 				var offset = get_offset_for_cell(px,py);
 				var monsterid = 'monster' + monstersadded;
@@ -130,12 +131,12 @@ var maphandler = function(){
 			monster_y_new -= 1
 		}
 
-		console.log("about to move monster: " + monster.id + "pos: " + monster_x_new + ":" + monster_y_new);
-		console.log("gamemap status for monster: " + gamemap[monster.left][monster.top])
+		//console.log("about to move monster: " + monster.id + "pos: " + monster_x_new + ":" + monster_y_new);
+		//console.log("gamemap status for monster: " + gamemap[monster.left][monster.top])
 
 		if (new_position_in_map(monster_x_new, monster_y_new)) {
 
-			console.log('new position: ' + monster_x_new + ":" + monster_y_new + "cell: " + gamemap[monster_x_new][monster_y_new]);
+			//console.log('new position: ' + monster_x_new + ":" + monster_y_new + "cell: " + gamemap[monster_x_new][monster_y_new]);
 
 			gamemap[monster.left][monster.top] = 'f';
 
@@ -144,7 +145,7 @@ var maphandler = function(){
 			gamemap[monster.left][monster.top] = monster.id;
 
 			var offset = get_offset_for_cell(monster.left,monster.top);
-			console.log("offset: " + offset.left + " : " + offset.top);
+			//console.log("offset: " + offset.left + " : " + offset.top);
 
 			move_block("#" + monster.id,offset);
 		}
@@ -152,11 +153,11 @@ var maphandler = function(){
 	}
 
 	function move_monsters(){
-		console.log('moving all monsters....');
+		//console.log('moving all monsters....');
 		window.clearInterval(monsterinterval);
 		for(var monsterid in monster_list){
 			if (monster_list.hasOwnProperty(monsterid)) {
-				console.log(monster_list[monsterid]);
+				//console.log(monster_list[monsterid]);
 				move_monster(monster_list[monsterid]);
 			}
 
@@ -258,7 +259,7 @@ var maphandler = function(){
 		var player_x_new = player_x + dx;
 		var player_y_new = player_y + dy;
 
-		console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
+		//console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
 
 		if (gamemap[player_x_new][player_y_new].match('pill')) {
 			var pillid = gamemap[player_x_new][player_y_new];
@@ -288,7 +289,7 @@ var maphandler = function(){
 
 		if (new_position_in_map(player_x_new, player_y_new)) {
 
-			console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
+			//console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
 
 			gamemap[player_x][player_y] = 'f';
 
@@ -297,22 +298,25 @@ var maphandler = function(){
 			gamemap[player_x][player_y] = 'p';
 
 			var offset = get_offset_for_cell(player_x,player_y);
-			console.log("offset: " + offset.left + " : " + offset.top);
+			//console.log("offset: " + offset.left + " : " + offset.top);
 
 			move_block('#player-cell',offset);
 		}
 	}
 
 	function eat_monster(monster_id){
+		window.clearInterval(monsterinterval);
 		delete monster_list.monster_id;
 		$('#' + monster_id).remove();
 		monstersadded--;
 		if(monstersadded == 0){
 			alert("You won!");
+			init_map();
 		}
 	}
 
 	function die(){
+		window.clearInterval(monsterinterval);
 		alert("Loser!");
 		init_map();
 	}
