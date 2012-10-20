@@ -38,7 +38,7 @@ var maphandler = function(){
 			$('#mapDiv').append(maprow);
 		}
 		
-		create_walls(10);
+		create_walls(30);
 
 		
 	}
@@ -71,7 +71,7 @@ var maphandler = function(){
 				x=wall_other;
 				y=i;
 			}
-			console.log("marking cell: (x/y)" + x + ":" + y);
+			//console.log("marking cell: (x/y)" + x + ":" + y);
 			mark_cell_wall(x,y);
 		}
 
