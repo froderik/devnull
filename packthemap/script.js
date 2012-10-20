@@ -1,6 +1,8 @@
 var maphandler = function(){
 
 	var matrixsize = 50;
+	var player_x = 0;
+	var player_y = 25;
 
 	var gamemap = [];
 
@@ -30,18 +32,31 @@ var maphandler = function(){
 
 			
 			for (x = 0; x<matrixsize;x++) {
-				var cellid = "" + x + "-" +  y;
-				maprow += '<span class="map-cell free-cell" id="' + cellid + '"/>';	
+				var cellid = get_cell_id(x,y);
+				maprow += '<span class="map-cell free-cell" id="' + cellid.substring(1) + '"/>';	
 			}
 
 			maprow += '</div>';
 			$('#mapDiv').append(maprow);
 		}
 		
-		create_walls(30);
+		create_walls(20);
 
-		
+		add_player();		
 	}
+
+
+
+	function add_player() {
+		$('#mapDiv').append('<div id="player-cell" class="map-cell"></div>');
+		var offset = $('#mapDiv').offset();
+		$('#player-cell').offset({ top: (offset.top + player_y * 10), left: (offset.left + player_x * 10)})
+
+		gamemap[player_y][player_y] = 'p';
+
+
+	}
+
 
 	function create_walls(numberofwalls) {
 		var i = 0;
@@ -79,11 +94,17 @@ var maphandler = function(){
 
 	function mark_cell_wall(x,y) {
 
-		var cellid = "#" + x + "-" + y;
+		var cellid = get_cell_id(x,y);
 		$(cellid).removeClass('free-cell');
 		$(cellid).addClass('wall-cell');
 		gamemap[x][y]= 'w';
 
+	}
+
+	function get_cell_id(x,y) {
+		var cid =  "#" + x + "-" + y;
+		console.log("cellid:" + cid);
+		return cid;
 	}
 
 	return {

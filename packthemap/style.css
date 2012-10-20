@@ -19,5 +19,11 @@
 	height: 10px;
 }
 
+#player-cell {
+	z-index: 100;
+	position: absolute;
+	background-color: yellow;
+}
+
 
 
