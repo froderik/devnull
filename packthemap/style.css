@@ -14,11 +14,19 @@
 }
 
 .pill-cell {
-	top: 0px;
-	left: 0px;
-	z-index: 100;
-	background-color: pink;
-	position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  background-color: pink;
+  position: absolute;
+}
+
+.monster-cell {
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  background-color: orange;
+  position: absolute;
 }
 
 .row-separator {
@@ -30,7 +38,7 @@
 #player-cell {
 	z-index: 100;
 	position: absolute;
-	
+
 
 }
 
