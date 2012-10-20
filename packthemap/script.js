@@ -1,8 +1,8 @@
 var maphandler = function(){
 
-	var matrixsize = 50;
+	var matrixsize = 30;
 	var player_x = 0;
-	var player_y = 25;
+	var player_y = matrixsize/2;
 
 	var gamemap = [];
 
@@ -42,7 +42,7 @@ var maphandler = function(){
 			$('#mapDiv').append(maprow);
 		}
 		
-		create_walls(20);
+		create_walls(10);
 
 		add_player();		
 
@@ -58,7 +58,7 @@ var maphandler = function(){
 		var offset = $('#mapDiv').offset();
 		$('#player-cell').offset({ top: (offset.top + player_y * 10), left: (offset.left + player_x * 10)})
 
-		gamemap[player_y][player_y] = 'p';
+		gamemap[player_x][player_y] = 'p';
 
 
 	}
@@ -76,11 +76,11 @@ var maphandler = function(){
 		var x,y;
 		var direction = Math.floor(Math.random()*10);
 		var wall_length = Math.floor(Math.random()* (0.3 * matrixsize)) + 5 ;
-		var wall_start = Math.floor(Math.random()*33) + 1
-		var wall_other = Math.floor(Math.random()*48) + 1
+		var wall_start = Math.floor(Math.random()*(matrixsize*0.6)) + 1
+		var wall_other = Math.floor(Math.random()*(matrixsize - 2)) + 1
 		var wall_end = wall_start + wall_length;
-		if (wall_end > 49) {
-			wall_end = 48;
+		if (wall_end > matrixsize - 1) {
+			wall_end = matrixsize - 2;
 		}
 
 		for (i=wall_start;i<wall_end;i++) {
@@ -109,7 +109,7 @@ var maphandler = function(){
 
 	function get_cell_id(x,y) {
 		var cid =  "#" + x + "-" + y;
-		console.log("cellid:" + cid);
+		//console.log("cellid:" + cid);
 		return cid;
 	}	
 
@@ -123,24 +123,43 @@ var maphandler = function(){
 				slide_image( -1, 0 )
 			}
 			if (e.keyCode == up) {
-				slide_image( 0, 1 )
+				slide_image( 0, -1 )
 			}
 			if (e.keyCode == right) {
 				slide_image( 1, 0 )
 			}
 			if (e.keyCode == down) {
-				slide_image( 0, -1 )
+				slide_image( 0, 1 )
 			}
 		});
 	}
 
+	function new_position_in_map(x,y) {
+		return (x >= 0 && x < matrixsize) && (y >= 0 && y < matrixsize);
+	}
+
 	function slide_image(dx, dy){
-		top = $('#player').css('top');
-		left = $('#player').css('left');
-		$('#player').fadeOut();
-		$('#player').css('top', top + dy)
-		$('#player').css('left', top + dx)
-		$('#player').fadeIn();
+		var player_x_new = player_x + dx;
+		var player_y_new = player_y + dy;
+
+		console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
+		console.log('new position: ' + player_x_new + ":" + player_y_new + "cell: " + gamemap[player_x_new][player_y_new]);
+
+
+		if (gamemap[player_x_new][player_y_new] == 'f' && new_position_in_map(player_x_new, player_y_new)) {
+			
+			gamemap[player_x][player_y] = 'f';
+
+			player_x = player_x_new;
+			player_y = player_y_new;
+			gamemap[player_x][player_y] = 'p';
+
+			var offset = $('#player-cell').offset();
+			//$('#player-cell').offset({ top: (offset.top + (dy * 10)), left: (offset.left + (dx * 10))})
+			$('#player-cell').animate({ top: (offset.top + (dy * 10)), 
+										left: (offset.left + (dx * 10))
+									  }, 250);
+		}
 
 	}
 
