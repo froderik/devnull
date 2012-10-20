@@ -30,8 +30,16 @@
 #player-cell {
 	z-index: 100;
 	position: absolute;
-	background-color: yellow;
+	
 
+}
+
+.player-normal {
+	background-color: yellow;
+}
+
+.player-hulk {
+	background-color: cyan;
 }
 
 

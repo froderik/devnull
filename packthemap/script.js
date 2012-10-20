@@ -8,6 +8,7 @@ var maphandler = function(){
 	var matrixsize = 30;
 	var player_x = 0;
 	var player_y = matrixsize/2;
+	var player_mode = 'n';
 
 	var gamemap = [];
 
@@ -66,10 +67,10 @@ var maphandler = function(){
 			console.log('pill pos: ' + px + ":" + py);
 
 			if (gamemap[px][py] == 'f') {
-				gamemap[px][py] = 'x';
 				pillsadded++;
 				var offset = get_offset_for_cell(px,py);
 				var pillid = 'pill' + pillsadded;
+				gamemap[px][py] = pillid;
 				$('#mapDiv').append('<div id="'+pillid+ '" class="map-cell pill-cell"></div>');
 				move_block("#" + pillid,offset);
 			}
@@ -86,7 +87,7 @@ var maphandler = function(){
 	}
 
 	function add_player() {
-		$('#mapDiv').append('<div id="player-cell" class="map-cell"></div>');
+		$('#mapDiv').append('<div id="player-cell" class="player-normal map-cell"></div>');
 		var offset = get_offset_for_cell(player_x,player_y);
 		$('#player-cell').offset({ top: (offset.top), left: (offset.left)})
 
@@ -181,6 +182,16 @@ var maphandler = function(){
 
 		console.log('player current position: ' + player_x + ":" + player_y + "cell: " + gamemap[player_x][player_y]);
 
+		if (gamemap[player_x_new][player_y_new].match('pill')) {
+			var pillid = gamemap[player_x_new][player_y_new];
+			$("#"+pillid).fadeOut(500);
+			gamemap[player_x_new][player_y_new] = 'f';
+			// TODO: player in turbo!!!!
+			player_mode = 'h';
+			$('#player-cell').removeClass('player-normal');
+			$('#player-cell').addClass('player-hulk');
+			setInterval(function(){player_normal_mode()},5000);
+		}
 
 		if (new_position_in_map(player_x_new, player_y_new)) {
 
@@ -198,6 +209,12 @@ var maphandler = function(){
 			move_block('#player-cell',offset);
 		}
 
+	}
+
+	function player_normal_mode() {
+		player_mode = 'n';
+		$('#player-cell').removeClass('player-hulk');
+		$('#player-cell').addClass('player-normal');
 	}
 
 	function move_block(id,offset) {
