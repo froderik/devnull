@@ -24,6 +24,7 @@ def scramble_one word
 end
 
 get '/guess' do
-  correct = @@ten_words.detect(params[:q])
+  correct = @@ten_words.include?(params[:q])
+  puts "======== #{correct.inspect}"
   status 404 unless correct
 end
